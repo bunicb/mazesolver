@@ -1,15 +1,14 @@
-from maze import Window, Point, Line
+from maze import Window, Point, Line, Cell
 
 def main():
     win = Window(800, 600)
-    point_one = Point(50, 50)
-    point_two = Point(200, 300)
-    test_line = Line(point_one, point_two)
-    point_three = Point(250, 50)
-    point_four = Point(10, 100)
-    test_line2 = Line(point_three, point_four)
-    win.draw_line(test_line, "red")
-    win.draw_line(test_line2, "blue")
+    cell_one = Cell(win)
+    cell_one.draw(100, 100, 200, 200)
+    cell_two = Cell(win)
+    cell_two.draw(300, 300, 400, 400)
+    cell_three = Cell(win)
+    cell_three.left_wall = False
+    cell_three.draw(200, 200, 300, 300)
     win.wait_for_close()
 
 main()

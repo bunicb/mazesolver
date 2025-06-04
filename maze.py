@@ -22,7 +22,7 @@ class Window:
         self.running = False
         self.root.protocol("WM_DELETE_WINDOW", self.close)
 
-    def draw_line(self, line, fill_colour):
+    def draw_line(self, line, fill_colour="black"):
         line.draw(self.canvas, fill_colour)
 
 class Point:
@@ -37,3 +37,41 @@ class Line:
 
     def draw(self, canvas, fill_colour):
         canvas.create_line(self.point1.x, self.point1.y, self.point2.x, self.point2.y, fill=fill_colour, width=2)
+
+class Cell:
+    def __init__(self, window):
+        self.left_wall = True
+        self.right_wall = True
+        self.top_wall = True
+        self.bottom_wall = True
+        self.x1 = -1
+        self.y1 = -1
+        self.x2 = -1
+        self.y2 = -1
+        self.win = window
+
+    def draw(self, x1, y1, x2, y2):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        if self.left_wall:
+            point1 = Point(self.x1, self.y1)
+            point2 = Point(self.x1, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall)
+        if self.right_wall:
+            point1 = Point(self.x2, self.y1)
+            point2 = Point(self.x2, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall)
+        if self.top_wall:
+            point1 = Point(self.x1, self.y1)
+            point2 = Point(self.x2, self.y1)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall)
+        if self.bottom_wall:
+            point1 = Point(self.x1, self.y2)
+            point2 = Point(self.x2, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall)
