@@ -40,7 +40,7 @@ class Line:
         canvas.create_line(self.point1.x, self.point1.y, self.point2.x, self.point2.y, fill=fill_colour, width=2)
 
 class Cell:
-    def __init__(self, window):
+    def __init__(self, window=None):
         self.left_wall = True
         self.right_wall = True
         self.top_wall = True
@@ -56,6 +56,8 @@ class Cell:
         self.y1 = y1
         self.x2 = x2
         self.y2 = y2
+        if self.win is None:
+            return
         if self.left_wall:
             point1 = Point(self.x1, self.y1)
             point2 = Point(self.x1, self.y2)
@@ -84,6 +86,8 @@ class Cell:
         center1 = Point((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2)
         center2 = Point((to_cell.x1 + to_cell.x2) / 2, (to_cell.y1 + to_cell.y2) / 2)
         line = Line(center1, center2)
+        if self.win is None:
+            return
         self.win.draw_line(line, fill_colour=colour)
 
 class Maze:
@@ -95,7 +99,7 @@ class Maze:
         num_cols,
         cell_size_x,
         cell_size_y,
-        win,
+        win=None,
     ):
         self.x1 = x1
         self.y1 = y1
@@ -105,7 +109,6 @@ class Maze:
         self.cell_size_y = cell_size_y
         self.win = win
         self.cells = []
-        # self.cells = [[Cell(win) for _ in range(num_cols)] for _ in range(num_rows)]
         self.create_cells()
 
     def create_cells(self):
@@ -125,6 +128,8 @@ class Maze:
         y1 = self.y1 + j * self.cell_size_y
         x2 = x1 + self.cell_size_x
         y2 = y1 + self.cell_size_y
+        if self.win is None:
+            return
         cell.draw(x1, y1, x2, y2)
         self.animate()
 
