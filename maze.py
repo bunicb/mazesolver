@@ -75,3 +75,12 @@ class Cell:
             point2 = Point(self.x2, self.y2)
             wall = Line(point1, point2)
             self.win.draw_line(wall)
+
+    def draw_move(self, to_cell, undo=False):
+        colour = "red"
+        if undo:
+            colour = "gray"
+        center1 = Point((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2)
+        center2 = Point((to_cell.x1 + to_cell.x2) / 2, (to_cell.y1 + to_cell.y2) / 2)
+        line = Line(center1, center2)
+        self.win.draw_line(line, fill_colour=colour)

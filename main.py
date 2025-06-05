@@ -9,6 +9,8 @@ def main():
     cell_three = Cell(win)
     cell_three.left_wall = False
     cell_three.draw(200, 200, 300, 300)
+    cell_one.draw_move(cell_two)
+    cell_two.draw_move(cell_three, undo=True)
     win.wait_for_close()
 
 main()
