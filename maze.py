@@ -63,21 +63,41 @@ class Cell:
             point2 = Point(self.x1, self.y2)
             wall = Line(point1, point2)
             self.win.draw_line(wall)
+        else:
+            point1 = Point(self.x1, self.y1)
+            point2 = Point(self.x1, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall, fill_colour="#d9d9d9")
         if self.right_wall:
             point1 = Point(self.x2, self.y1)
             point2 = Point(self.x2, self.y2)
             wall = Line(point1, point2)
             self.win.draw_line(wall)
+        else:
+            point1 = Point(self.x2, self.y1)
+            point2 = Point(self.x2, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall, fill_colour="#d9d9d9")
         if self.top_wall:
             point1 = Point(self.x1, self.y1)
             point2 = Point(self.x2, self.y1)
             wall = Line(point1, point2)
             self.win.draw_line(wall)
+        else:
+            point1 = Point(self.x1, self.y1)
+            point2 = Point(self.x2, self.y1)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall, fill_colour="#d9d9d9")
         if self.bottom_wall:
             point1 = Point(self.x1, self.y2)
             point2 = Point(self.x2, self.y2)
             wall = Line(point1, point2)
             self.win.draw_line(wall)
+        else:
+            point1 = Point(self.x1, self.y2)
+            point2 = Point(self.x2, self.y2)
+            wall = Line(point1, point2)
+            self.win.draw_line(wall, fill_colour="#d9d9d9")
 
     def draw_move(self, to_cell, undo=False):
         colour = "red"
@@ -110,6 +130,7 @@ class Maze:
         self.win = win
         self.cells = []
         self.create_cells()
+        self.break_entrance_and_exit()
 
     def create_cells(self):
         for col in range(self.num_cols):
@@ -136,3 +157,9 @@ class Maze:
     def animate(self):
         self.win.redraw()
         sleep(0.03)
+
+    def break_entrance_and_exit(self):
+        self.cells[0][0].top_wall = False
+        self.draw_cell(0, 0)
+        self.cells[self.num_cols - 1][self.num_rows - 1].bottom_wall = False
+        self.draw_cell(self.num_cols - 1, self.num_rows - 1)
