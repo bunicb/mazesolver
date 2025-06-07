@@ -163,7 +163,7 @@ class Maze:
 
     def animate(self):
         self.win.redraw()
-        sleep(0.03)
+        sleep(0.02)
 
     def break_entrance_and_exit(self):
         self.cells[0][0].top_wall = False
@@ -209,3 +209,32 @@ class Maze:
         for col in self.cells:
             for cell in col:
                 cell.visited = False
+
+    def solve(self):
+        return self.solve_r(0, 0)
+
+    def solve_r(self, i, j):
+        self.animate()
+        cell = self.cells[i][j]
+        cell.visited = True
+        if cell == self.cells[self.num_cols - 1][self.num_rows - 1]:
+            return True
+        directions = [
+            (-1, 0, "left"),  # Left
+            (1, 0, "right"),   # Right
+            (0, -1, "top"),  # Up
+            (0, 1, "bottom")    # Down
+        ]
+        for dir in directions:
+            next_i = i + dir[0]
+            next_j = j + dir[1]
+            if (0 <= next_i < self.num_cols and
+                0 <= next_j < self.num_rows and
+                not self.cells[next_i][next_j].visited and
+                not cell.__dict__[dir[2] + "_wall"]
+                ):
+                cell.draw_move(self.cells[next_i][next_j])
+                if self.solve_r(next_i, next_j):
+                    return True
+                cell.draw_move(self.cells[next_i][next_j], undo=True)
+        return False
