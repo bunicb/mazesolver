@@ -1,5 +1,6 @@
 from tkinter import Tk, BOTH, Canvas
 from time import sleep
+import random
 
 class Window:
     def __init__(self, width, height):
@@ -49,6 +50,7 @@ class Cell:
         self.y1 = -1
         self.x2 = -1
         self.y2 = -1
+        self.visited = False
         self.win = window
 
     def draw(self, x1, y1, x2, y2):
@@ -120,6 +122,7 @@ class Maze:
         cell_size_x,
         cell_size_y,
         win=None,
+        seed=None,
     ):
         self.x1 = x1
         self.y1 = y1
@@ -129,8 +132,11 @@ class Maze:
         self.cell_size_y = cell_size_y
         self.win = win
         self.cells = []
+        if seed:
+            random.seed(seed)
         self.create_cells()
         self.break_entrance_and_exit()
+        self.break_walls_r(0, 0)
 
     def create_cells(self):
         for col in range(self.num_cols):
@@ -163,3 +169,37 @@ class Maze:
         self.draw_cell(0, 0)
         self.cells[self.num_cols - 1][self.num_rows - 1].bottom_wall = False
         self.draw_cell(self.num_cols - 1, self.num_rows - 1)
+
+    def break_walls_r(self, i, j):
+        cell = self.cells[i][j]
+        cell.visited = True
+        while True:
+            to_visit = []
+            if (i-1)>=0 and not self.cells[i-1][j].visited:
+                to_visit.append((i-1, j))
+            if (i+1)<self.num_cols and not self.cells[i+1][j].visited:
+                to_visit.append((i+1, j))
+            if (j-1)>=0 and not self.cells[i][j-1].visited:
+                to_visit.append((i, j-1))
+            if (j+1)<self.num_rows and not self.cells[i][j+1].visited:
+                to_visit.append((i, j+1))
+            if not to_visit:
+                self.draw_cell(i, j)
+                return
+            next_cell = random.randrange(len(to_visit))
+            next_i, next_j = to_visit[next_cell]
+            if next_i < i:
+                cell.left_wall = False
+                self.cells[next_i][next_j].right_wall = False
+            elif next_i > i:
+                cell.right_wall = False
+                self.cells[next_i][next_j].left_wall = False
+            elif next_j < j:
+                cell.top_wall = False
+                self.cells[next_i][next_j].bottom_wall = False
+            elif next_j > j:
+                cell.bottom_wall = False
+                self.cells[next_i][next_j].top_wall = False
+            self.draw_cell(i, j)
+            self.draw_cell(next_i, next_j)
+            self.break_walls_r(next_i, next_j)
